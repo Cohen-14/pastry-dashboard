@@ -9,9 +9,12 @@ from google.oauth2.service_account import Credentials
 FOLDER_ID = "19ORGAVIga8ebjGX73tuXOcqfl6qwucVh"  # Replace with your actual folder ID
 
 # Authenticate Google Drive API
-@st.cache_data
 def get_drive_service():
-    creds = Credentials.from_service_account_file("credentials.json", scopes=["https://www.googleapis.com/auth/drive"])
+    # Access the credentials from Streamlit secrets
+    google_credentials = st.secrets["google_credentials"]
+    # Create credentials using the loaded secret
+    creds = Credentials.from_service_account_info(google_credentials, scopes=["https://www.googleapis.com/auth/drive"])
+    # Build and return the Drive service
     return build("drive", "v3", credentials=creds)
 
 # Get file ID from Google Drive by name
